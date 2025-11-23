@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DemoWorkosRouteImport } from './routes/demo/workos'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
 import { Route as DemoStorybookRouteImport } from './routes/demo/storybook'
+import { Route as DemoConvexRequestsRouteImport } from './routes/demo/convex-requests'
 import { Route as DemoConvexRouteImport } from './routes/demo/convex'
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.server-funcs'
 import { Route as DemoStartApiRequestRouteImport } from './routes/demo/start.api-request'
@@ -43,6 +44,11 @@ const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
 const DemoStorybookRoute = DemoStorybookRouteImport.update({
   id: '/demo/storybook',
   path: '/demo/storybook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoConvexRequestsRoute = DemoConvexRequestsRouteImport.update({
+  id: '/demo/convex-requests',
+  path: '/demo/convex-requests',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoConvexRoute = DemoConvexRouteImport.update({
@@ -104,6 +110,7 @@ const DemoStartSsrDataOnlyRoute = DemoStartSsrDataOnlyRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/demo/convex': typeof DemoConvexRoute
+  '/demo/convex-requests': typeof DemoConvexRequestsRoute
   '/demo/storybook': typeof DemoStorybookRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/demo/workos': typeof DemoWorkosRoute
@@ -121,6 +128,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/demo/convex': typeof DemoConvexRoute
+  '/demo/convex-requests': typeof DemoConvexRequestsRoute
   '/demo/storybook': typeof DemoStorybookRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/demo/workos': typeof DemoWorkosRoute
@@ -139,6 +147,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/demo/convex': typeof DemoConvexRoute
+  '/demo/convex-requests': typeof DemoConvexRequestsRoute
   '/demo/storybook': typeof DemoStorybookRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/demo/workos': typeof DemoWorkosRoute
@@ -158,6 +167,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/demo/convex'
+    | '/demo/convex-requests'
     | '/demo/storybook'
     | '/demo/tanstack-query'
     | '/demo/workos'
@@ -175,6 +185,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/demo/convex'
+    | '/demo/convex-requests'
     | '/demo/storybook'
     | '/demo/tanstack-query'
     | '/demo/workos'
@@ -192,6 +203,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/demo/convex'
+    | '/demo/convex-requests'
     | '/demo/storybook'
     | '/demo/tanstack-query'
     | '/demo/workos'
@@ -210,6 +222,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DemoConvexRoute: typeof DemoConvexRoute
+  DemoConvexRequestsRoute: typeof DemoConvexRequestsRoute
   DemoStorybookRoute: typeof DemoStorybookRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
   DemoWorkosRoute: typeof DemoWorkosRoute
@@ -253,6 +266,13 @@ declare module '@tanstack/react-router' {
       path: '/demo/storybook'
       fullPath: '/demo/storybook'
       preLoaderRoute: typeof DemoStorybookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/convex-requests': {
+      id: '/demo/convex-requests'
+      path: '/demo/convex-requests'
+      fullPath: '/demo/convex-requests'
+      preLoaderRoute: typeof DemoConvexRequestsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo/convex': {
@@ -338,6 +358,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DemoConvexRoute: DemoConvexRoute,
+  DemoConvexRequestsRoute: DemoConvexRequestsRoute,
   DemoStorybookRoute: DemoStorybookRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
   DemoWorkosRoute: DemoWorkosRoute,
