@@ -1,9 +1,10 @@
+'use client'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useAuth } from '@workos-inc/authkit-react'
+import { useAuth } from "@workos-inc/authkit-react"
 import { getAuth } from '@workos/authkit-tanstack-react-start'
 
-export const Route = createFileRoute('/demo/workos')({  
-  ssr: true,
+
+export const Route = createFileRoute('/demo/workos')({    
   component: App,
   loader: async () => {
     const {user} = await getAuth()
@@ -13,13 +14,14 @@ export const Route = createFileRoute('/demo/workos')({
   },
 })
 
-function App() {
+function App() {  
   const { isLoading, signIn } = useAuth();
-  const { user } = Route.useLoaderData();
-  const navigate = useNavigate();
+  const { user } = Route.useLoaderData();  
+  const navigate = useNavigate(); 
+
   const signOut = () => {
     navigate({to: '/auth/logout', replace:true})
-  }
+  }  
 
   if (isLoading) {
     return (
@@ -91,7 +93,7 @@ function App() {
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors shadow-lg hover:shadow-xl"
             >
               Sign Out
-            </button>
+            </button>            
           </div>
         </div>
       </div>
@@ -108,12 +110,12 @@ function App() {
           Sign in to view your profile information
         </p>        
         <button
-          onClick={() => signIn()}
+          onClick={signIn}
           disabled={isLoading}
           className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Sign In with AuthKit
-        </button>
+        </button>        
       </div>
     </div>
   )

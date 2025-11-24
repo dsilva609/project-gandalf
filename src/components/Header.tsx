@@ -1,3 +1,4 @@
+'use client'
 import { Link, useNavigate } from '@tanstack/react-router'
 
 import WorkOSHeader from './workos-user.tsx'

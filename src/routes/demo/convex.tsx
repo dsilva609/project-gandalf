@@ -6,6 +6,7 @@ import { Trash2, Plus, Check, Circle } from 'lucide-react'
 import { api } from '../../../convex/_generated/api'
 import { Id } from '../../../convex/_generated/dataModel'
 
+
 export const Route = createFileRoute('/demo/convex')({
   ssr: false,
   component: ConvexTodos,
@@ -16,6 +17,7 @@ function ConvexTodos() {
   const addTodo = useMutation(api.todos.add)
   const toggleTodo = useMutation(api.todos.toggle)
   const removeTodo = useMutation(api.todos.remove)
+  
 
   const [newTodo, setNewTodo] = useState('')
 
@@ -50,7 +52,7 @@ function ConvexTodos() {
         background:
           'linear-gradient(135deg, #667a56 0%, #8fbc8f 25%, #90ee90 50%, #98fb98 75%, #f0fff0 100%)',
       }}
-    >
+    >      
       <div className="w-full max-w-2xl">
         {/* Header Card */}
         <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-green-200/50 p-8 mb-6">

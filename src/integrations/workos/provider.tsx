@@ -11,8 +11,7 @@ export default function AppWorkOSProvider({
   const apiHostname = import.meta.env.VITE_WORKOS_API_HOSTNAME;
   const redirectUri = import.meta.env.VITE_WORKOS_REDIRECT_URI;
 
-  return (
-    <AuthKitProvider
+  return <AuthKitProvider
       clientId={clientId}
       apiHostname={apiHostname}
       redirectUri={redirectUri}
@@ -23,6 +22,5 @@ export default function AppWorkOSProvider({
       }}
     >
       {children}
-    </AuthKitProvider>
-  )
+    </AuthKitProvider>  
 }
