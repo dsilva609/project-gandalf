@@ -15,6 +15,7 @@ import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-qu
 import { Route as DemoStorybookRouteImport } from './routes/demo/storybook'
 import { Route as DemoConvexRequestsRouteImport } from './routes/demo/convex-requests'
 import { Route as DemoConvexRouteImport } from './routes/demo/convex'
+import { Route as AuthLogoutRouteImport } from './routes/auth/logout'
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.server-funcs'
 import { Route as DemoStartApiRequestRouteImport } from './routes/demo/start.api-request'
 import { Route as DemoSentryTestingRouteImport } from './routes/demo/sentry.testing'
@@ -54,6 +55,11 @@ const DemoConvexRequestsRoute = DemoConvexRequestsRouteImport.update({
 const DemoConvexRoute = DemoConvexRouteImport.update({
   id: '/demo/convex',
   path: '/demo/convex',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthLogoutRoute = AuthLogoutRouteImport.update({
+  id: '/auth/logout',
+  path: '/auth/logout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoStartServerFuncsRoute = DemoStartServerFuncsRouteImport.update({
@@ -109,6 +115,7 @@ const DemoStartSsrDataOnlyRoute = DemoStartSsrDataOnlyRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth/logout': typeof AuthLogoutRoute
   '/demo/convex': typeof DemoConvexRoute
   '/demo/convex-requests': typeof DemoConvexRequestsRoute
   '/demo/storybook': typeof DemoStorybookRoute
@@ -127,6 +134,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth/logout': typeof AuthLogoutRoute
   '/demo/convex': typeof DemoConvexRoute
   '/demo/convex-requests': typeof DemoConvexRequestsRoute
   '/demo/storybook': typeof DemoStorybookRoute
@@ -146,6 +154,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth/logout': typeof AuthLogoutRoute
   '/demo/convex': typeof DemoConvexRoute
   '/demo/convex-requests': typeof DemoConvexRequestsRoute
   '/demo/storybook': typeof DemoStorybookRoute
@@ -166,6 +175,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth/logout'
     | '/demo/convex'
     | '/demo/convex-requests'
     | '/demo/storybook'
@@ -184,6 +194,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth/logout'
     | '/demo/convex'
     | '/demo/convex-requests'
     | '/demo/storybook'
@@ -202,6 +213,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/auth/logout'
     | '/demo/convex'
     | '/demo/convex-requests'
     | '/demo/storybook'
@@ -221,6 +233,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthLogoutRoute: typeof AuthLogoutRoute
   DemoConvexRoute: typeof DemoConvexRoute
   DemoConvexRequestsRoute: typeof DemoConvexRequestsRoute
   DemoStorybookRoute: typeof DemoStorybookRoute
@@ -280,6 +293,13 @@ declare module '@tanstack/react-router' {
       path: '/demo/convex'
       fullPath: '/demo/convex'
       preLoaderRoute: typeof DemoConvexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/logout': {
+      id: '/auth/logout'
+      path: '/auth/logout'
+      fullPath: '/auth/logout'
+      preLoaderRoute: typeof AuthLogoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo/start/server-funcs': {
@@ -357,6 +377,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthLogoutRoute: AuthLogoutRoute,
   DemoConvexRoute: DemoConvexRoute,
   DemoConvexRequestsRoute: DemoConvexRequestsRoute,
   DemoStorybookRoute: DemoStorybookRoute,

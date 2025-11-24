@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 
 import WorkOSHeader from './workos-user.tsx'
 
@@ -17,11 +17,16 @@ import {
   X,
 } from 'lucide-react'
 
-export default function Header() {
+import type { User } from '@workos/authkit-tanstack-react-start'
+
+export default function Header({ user }: { user?: User }) {
   const [isOpen, setIsOpen] = useState(false)
   const [groupedExpanded, setGroupedExpanded] = useState<
     Record<string, boolean>
-  >({})
+  >({})  
+
+  const navigate = useNavigate();
+  const signOut = () => navigate({ to: '/auth/logout', replace: true})  
 
   return (
     <>
@@ -256,7 +261,16 @@ export default function Header() {
         </nav>
 
         <div className="p-4 border-t border-gray-700 bg-gray-800 flex flex-col gap-2">
-          <WorkOSHeader />
+          {user ?
+            <button
+              onClick={signOut}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors shadow-lg hover:shadow-xl"
+            >
+              Sign Out
+            </button> 
+            : <WorkOSHeader/>
+          }
+          
         </div>
       </aside>
     </>

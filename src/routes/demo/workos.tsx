@@ -1,4 +1,4 @@
-import { createFileRoute, useLoaderData } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useAuth } from '@workos-inc/authkit-react'
 import { getAuth } from '@workos/authkit-tanstack-react-start'
 
@@ -14,8 +14,12 @@ export const Route = createFileRoute('/demo/workos')({
 })
 
 function App() {
-  const { isLoading, signIn, signOut } = useAuth();
+  const { isLoading, signIn } = useAuth();
   const { user } = Route.useLoaderData();
+  const navigate = useNavigate();
+  const signOut = () => {
+    navigate({to: '/auth/logout', replace:true})
+  }
 
   if (isLoading) {
     return (
@@ -28,8 +32,7 @@ function App() {
   }
 
   if (user) {
-    return (
-      
+    return (      
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center p-4">
         <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-2xl p-8 w-full max-w-md border border-gray-700/50">
           <h1 className="text-2xl font-bold text-white mb-6 text-center">
@@ -84,7 +87,7 @@ function App() {
 
             {/* Sign Out Button */}
             <button
-              onClick={() => signOut({navigate: true})}
+              onClick={signOut}
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors shadow-lg hover:shadow-xl"
             >
               Sign Out

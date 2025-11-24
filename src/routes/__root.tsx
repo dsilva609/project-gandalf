@@ -2,6 +2,7 @@ import {
   HeadContent,
   Scripts,
   createRootRouteWithContext,
+  
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
@@ -17,6 +18,7 @@ import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
+import { getAuth } from '@workos/authkit-tanstack-react-start'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -41,13 +43,20 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         rel: 'stylesheet',
         href: appCss,
       },
-    ],
+    ],    
   }),
 
   shellComponent: RootDocument,
+  loader: async () => {
+    const { user } = await getAuth();
+    return {
+      user,
+    }
+  },
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const { user } = Route.useLoaderData();
   return (
     <html lang="en">
       <head>
@@ -56,7 +65,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <body>
         <WorkOSProvider>
           <ConvexProvider>
-            <Header />
+            <Header user={user} />
             {children}
             <TanStackDevtools
               config={{
