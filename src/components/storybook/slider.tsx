@@ -1,15 +1,15 @@
-import React from 'react'
+import React from 'react';
 
 export interface SliderProps {
-  label: string
-  id: string
-  value?: number
-  onChange?: (value: number) => void
-  min?: number
-  max?: number
-  step?: number
-  showValue?: boolean
-  className?: string
+  label: string;
+  id: string;
+  value?: number;
+  onChange?: (value: number) => void;
+  min?: number;
+  max?: number;
+  step?: number;
+  showValue?: boolean;
+  className?: string;
 }
 
 export const Slider: React.FC<SliderProps> = ({
@@ -26,16 +26,11 @@ export const Slider: React.FC<SliderProps> = ({
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
       <div className="flex justify-between items-center">
-        <label
-          htmlFor={id}
-          className="text-sm font-medium text-gray-700 dark:text-gray-200"
-        >
+        <label htmlFor={id} className="text-sm font-medium text-gray-700 dark:text-gray-200">
           {label}
         </label>
         {showValue && (
-          <span className="text-sm font-semibold text-blue-600 dark:text-blue-400 min-w-12 text-right">
-            {value}
-          </span>
+          <span className="text-sm font-semibold text-blue-600 dark:text-blue-400 min-w-12 text-right">{value}</span>
         )}
       </div>
       <input
@@ -53,5 +48,5 @@ export const Slider: React.FC<SliderProps> = ({
         <span>{max}</span>
       </div>
     </div>
-  )
-}
+  );
+};

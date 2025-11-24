@@ -1,5 +1,6 @@
-import { v } from 'convex/values'
-import { mutation, query } from './_generated/server'
+import { v } from 'convex/values';
+
+import { mutation, query } from './_generated/server';
 
 export const getByExternalId = query({
   args: { externalId: v.string() },
@@ -19,9 +20,9 @@ export const getByExternalId = query({
     return await ctx.db
       .query('users')
       .withIndex('by_external_id', (q) => q.eq('externalId', args.externalId))
-      .first()
+      .first();
   },
-})
+});
 
 export const create = mutation({
   args: {
@@ -38,4 +39,4 @@ export const create = mutation({
       lastName: args.lastName,
       updatedOn: Date.now(),
     }),
-})
+});

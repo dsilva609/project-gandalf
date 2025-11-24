@@ -1,7 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { handleCallbackRoute } from '@workos/authkit-tanstack-react-start';
+
 import { ConvexHttpClient } from 'convex/browser';
-import { api } from 'convex/_generated/api';
+
+import { api } from '~/convex/_generated/api';
 
 const CONVEX_URL = process.env.VITE_CONVEX_URL || process.env.CONVEX_URL;
 if (!CONVEX_URL) {
@@ -10,17 +12,24 @@ if (!CONVEX_URL) {
 
 const convexClient = new ConvexHttpClient(CONVEX_URL);
 
-export const Route = createFileRoute('/api/auth/callback')({  
+export const Route = createFileRoute('/api/auth/callback')({
   server: {
     handlers: {
       GET: handleCallbackRoute({
         onSuccess: async ({ user, authenticationMethod }) => {
           console.log('Authentication successful:', user.email, authenticationMethod);
-          
-          const exists = await convexClient.query(api.users.getByExternalId, { externalId: user.id });
-        
+
+          const exists = await convexClient.query(api.users.getByExternalId, {
+            externalId: user.id,
+          });
+
           if (!exists) {
-            await convexClient.mutation(api.users.create, { externalId: user.id, displayName: user.email, firstName: user.firstName!, lastName: user.lastName! });
+            await convexClient.mutation(api.users.create, {
+              externalId: user.id,
+              displayName: user.email,
+              firstName: user.firstName!,
+              lastName: user.lastName!,
+            });
           }
           console.log(exists);
         },

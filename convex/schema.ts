@@ -1,5 +1,5 @@
-import { defineSchema, defineTable } from 'convex/server'
-import { v } from 'convex/values'
+import { defineSchema, defineTable } from 'convex/server';
+import { v } from 'convex/values';
 
 export default defineSchema({
   products: defineTable({
@@ -26,4 +26,4 @@ export default defineSchema({
     lastName: v.string(),
     updatedOn: v.number(),
   }).index('by_external_id', ['externalId']),
-})
+});

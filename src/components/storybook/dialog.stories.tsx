@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { Button } from './button';
+import { Dialog } from './dialog';
 
-import { Dialog } from './dialog'
-import { Button } from './button'
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   title: 'Form/Dialog',
@@ -10,10 +10,10 @@ const meta = {
     layout: 'centered',
   },
   tags: ['autodocs'],
-} satisfies Meta<typeof Dialog>
+} satisfies Meta<typeof Dialog>;
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
@@ -26,16 +26,14 @@ export const Default: Story = {
       </div>
     ),
   },
-}
+};
 
 export const WithFooter: Story = {
   args: {
     title: 'Confirm Action',
     children: (
       <div className="space-y-4">
-        <p className="text-gray-700 dark:text-gray-300">
-          Are you sure you want to proceed with this action?
-        </p>
+        <p className="text-gray-700 dark:text-gray-300">Are you sure you want to proceed with this action?</p>
       </div>
     ),
     footer: (
@@ -49,7 +47,7 @@ export const WithFooter: Story = {
       </div>
     ),
   },
-}
+};
 
 export const Form: Story = {
   args: {
@@ -57,9 +55,7 @@ export const Form: Story = {
     children: (
       <div className="space-y-4 min-w-80">
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
-            Email
-          </label>
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-200">Email</label>
           <input
             type="email"
             placeholder="you@example.com"
@@ -67,9 +63,7 @@ export const Form: Story = {
           />
         </div>
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium text-gray-700 dark:text-gray-200">
-            Password
-          </label>
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-200">Password</label>
           <input
             type="password"
             placeholder="••••••••"
@@ -89,4 +83,4 @@ export const Form: Story = {
       </div>
     ),
   },
-}
+};

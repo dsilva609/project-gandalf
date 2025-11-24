@@ -1,9 +1,8 @@
-'use client'
-import { Link, useNavigate } from '@tanstack/react-router'
+'use client';
 
-import WorkOSHeader from './workos-user.tsx'
+import { useState } from 'react';
 
-import { useState } from 'react'
+import { Link, useNavigate } from '@tanstack/react-router';
 import {
   BookOpen,
   ChevronDown,
@@ -16,18 +15,18 @@ import {
   SquareFunction,
   StickyNote,
   X,
-} from 'lucide-react'
+} from 'lucide-react';
 
-import type { User } from '@workos/authkit-tanstack-react-start'
+import WorkOSHeader from './workos-user.tsx';
+
+import type { User } from '@workos/authkit-tanstack-react-start';
 
 export default function Header({ user }: { user?: User }) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [groupedExpanded, setGroupedExpanded] = useState<
-    Record<string, boolean>
-  >({})  
+  const [isOpen, setIsOpen] = useState(false);
+  const [groupedExpanded, setGroupedExpanded] = useState<Record<string, boolean>>({});
 
   const navigate = useNavigate();
-  const signOut = () => navigate({ to: '/auth/logout', replace: true})  
+  const signOut = () => navigate({ to: '/auth/logout', replace: true });
 
   return (
     <>
@@ -41,11 +40,7 @@ export default function Header({ user }: { user?: User }) {
         </button>
         <h1 className="ml-4 text-xl font-semibold">
           <Link to="/">
-            <img
-              src="/tanstack-word-logo-white.svg"
-              alt="TanStack Logo"
-              className="h-10"
-            />
+            <img src="/tanstack-word-logo-white.svg" alt="TanStack Logo" className="h-10" />
           </Link>
         </h1>
       </header>
@@ -72,8 +67,7 @@ export default function Header({ user }: { user?: User }) {
             onClick={() => setIsOpen(false)}
             className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
             activeProps={{
-              className:
-                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
+              className: 'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
             }}
           >
             <Home size={20} />
@@ -87,8 +81,7 @@ export default function Header({ user }: { user?: User }) {
             onClick={() => setIsOpen(false)}
             className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
             activeProps={{
-              className:
-                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
+              className: 'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
             }}
           >
             <SquareFunction size={20} />
@@ -100,8 +93,7 @@ export default function Header({ user }: { user?: User }) {
             onClick={() => setIsOpen(false)}
             className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
             activeProps={{
-              className:
-                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
+              className: 'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
             }}
           >
             <Network size={20} />
@@ -130,11 +122,7 @@ export default function Header({ user }: { user?: User }) {
                 }))
               }
             >
-              {groupedExpanded.StartSSRDemo ? (
-                <ChevronDown size={20} />
-              ) : (
-                <ChevronRight size={20} />
-              )}
+              {groupedExpanded.StartSSRDemo ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
             </button>
           </div>
           {groupedExpanded.StartSSRDemo && (
@@ -185,8 +173,7 @@ export default function Header({ user }: { user?: User }) {
             onClick={() => setIsOpen(false)}
             className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
             activeProps={{
-              className:
-                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
+              className: 'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
             }}
           >
             <CircleUserRound size={20} />
@@ -198,8 +185,7 @@ export default function Header({ user }: { user?: User }) {
             onClick={() => setIsOpen(false)}
             className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
             activeProps={{
-              className:
-                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
+              className: 'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
             }}
           >
             <Globe size={20} />
@@ -211,8 +197,7 @@ export default function Header({ user }: { user?: User }) {
             onClick={() => setIsOpen(false)}
             className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
             activeProps={{
-              className:
-                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
+              className: 'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
             }}
           >
             <Globe size={20} />
@@ -224,8 +209,7 @@ export default function Header({ user }: { user?: User }) {
             onClick={() => setIsOpen(false)}
             className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
             activeProps={{
-              className:
-                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
+              className: 'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
             }}
           >
             <Globe size={20} />
@@ -237,8 +221,7 @@ export default function Header({ user }: { user?: User }) {
             onClick={() => setIsOpen(false)}
             className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
             activeProps={{
-              className:
-                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
+              className: 'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
             }}
           >
             <BookOpen size={20} />
@@ -250,8 +233,7 @@ export default function Header({ user }: { user?: User }) {
             onClick={() => setIsOpen(false)}
             className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
             activeProps={{
-              className:
-                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
+              className: 'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
             }}
           >
             <Network size={20} />
@@ -262,18 +244,18 @@ export default function Header({ user }: { user?: User }) {
         </nav>
 
         <div className="p-4 border-t border-gray-700 bg-gray-800 flex flex-col gap-2">
-          {user ?
+          {user ? (
             <button
               onClick={signOut}
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors shadow-lg hover:shadow-xl"
             >
               Sign Out
-            </button> 
-            : <WorkOSHeader/>
-          }
-          
+            </button>
+          ) : (
+            <WorkOSHeader />
+          )}
         </div>
       </aside>
     </>
-  )
+  );
 }

@@ -1,14 +1,14 @@
-import { defineConfig } from 'vite'
-import { devtools } from '@tanstack/devtools-vite'
-import { tanstackStart } from '@tanstack/react-start/plugin/vite'
-import viteReact from '@vitejs/plugin-react'
-import viteTsConfigPaths from 'vite-tsconfig-paths'
-import tailwindcss from '@tailwindcss/vite'
-import { nitro } from 'nitro/vite'
-import * as dotenv from 'dotenv'
+import tailwindcss from '@tailwindcss/vite';
+import { devtools } from '@tanstack/devtools-vite';
+import { tanstackStart } from '@tanstack/react-start/plugin/vite';
+import viteReact from '@vitejs/plugin-react';
+import * as dotenv from 'dotenv';
+import { nitro } from 'nitro/vite';
+import { defineConfig } from 'vite';
+import viteTsConfigPaths from 'vite-tsconfig-paths';
 
-dotenv.config({ path: '.env.local' })
-dotenv.config()
+dotenv.config({ path: '.env.local' });
+dotenv.config();
 
 const config = defineConfig({
   plugins: [
@@ -25,6 +25,6 @@ const config = defineConfig({
   optimizeDeps: {
     include: ['cookie'],
   },
-})
+});
 
-export default config
+export default config;

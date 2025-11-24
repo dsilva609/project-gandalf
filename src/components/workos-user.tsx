@@ -1,11 +1,11 @@
-import { useAuth } from '@workos-inc/authkit-react'
+import { useAuth } from '@workos-inc/authkit-react';
 
 export default function SignInButton({ large }: { large?: boolean }) {
-  const { user, isLoading, signIn, signOut } = useAuth()
+  const { user, isLoading, signIn, signOut } = useAuth();
 
   const buttonClasses = `${
     large ? 'px-6 py-3 text-base' : 'px-4 py-2 text-sm'
-  } bg-blue-600 hover:bg-blue-700 text-white font-medium rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed`
+  } bg-blue-600 hover:bg-blue-700 text-white font-medium rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed`;
 
   if (user) {
     return (
@@ -24,18 +24,18 @@ export default function SignInButton({ large }: { large?: boolean }) {
           Sign Out
         </button>
       </div>
-    )
+    );
   }
 
   return (
     <button
       onClick={() => {
-        signIn()
+        signIn();
       }}
       className={buttonClasses}
       disabled={isLoading}
     >
       Sign In {large && 'with AuthKit'}
     </button>
-  )
+  );
 }

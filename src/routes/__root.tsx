@@ -1,27 +1,19 @@
-import {
-  HeadContent,
-  Scripts,
-  createRootRouteWithContext,
-  
-} from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
+import { TanStackDevtools } from '@tanstack/react-devtools';
+import { HeadContent, Scripts, createRootRouteWithContext } from '@tanstack/react-router';
+import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
+import { getAuth } from '@workos/authkit-tanstack-react-start';
 
-import Header from '../components/Header'
+import Header from '~/components/Header';
+import ConvexProvider from '~/integrations/convex/provider';
+import TanStackQueryDevtools from '~/integrations/tanstack-query/devtools';
+import WorkOSProvider from '~/integrations/workos/provider';
 
-import WorkOSProvider from '../integrations/workos/provider'
+import appCss from '../styles.css?url';
 
-import ConvexProvider from '../integrations/convex/provider'
-
-import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
-
-import appCss from '../styles.css?url'
-
-import type { QueryClient } from '@tanstack/react-query'
-import { getAuth } from '@workos/authkit-tanstack-react-start'
+import type { QueryClient } from '@tanstack/react-query';
 
 interface MyRouterContext {
-  queryClient: QueryClient
+  queryClient: QueryClient;
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
@@ -43,7 +35,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         rel: 'stylesheet',
         href: appCss,
       },
-    ],    
+    ],
   }),
 
   shellComponent: RootDocument,
@@ -51,9 +43,9 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     const { user } = await getAuth();
     return {
       user,
-    }
+    };
   },
-})
+});
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   const { user } = Route.useLoaderData();
@@ -84,5 +76,5 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Scripts />
       </body>
     </html>
-  )
+  );
 }

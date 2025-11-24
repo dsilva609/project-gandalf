@@ -6,21 +6,23 @@
  * @ai_context: Demonstrates Sentry features through interactive examples with educational context
  */
 
-import * as fs from 'node:fs/promises'
-import { createFileRoute } from '@tanstack/react-router'
-import { createServerFn } from '@tanstack/react-start'
-import * as Sentry from '@sentry/tanstackstart-react'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react';
+
+import * as fs from 'node:fs/promises';
+
+import * as Sentry from '@sentry/tanstackstart-react';
+import { createFileRoute } from '@tanstack/react-router';
+import { createServerFn } from '@tanstack/react-start';
 
 export const Route = createFileRoute('/demo/sentry/testing')({
   component: RouteComponent,
   errorComponent: ({ error }) => {
     useEffect(() => {
-      Sentry.captureException(error)
-    }, [error])
-    return <div>Error: {error.message}</div>
+      Sentry.captureException(error);
+    }, [error]);
+    return <div>Error: {error.message}</div>;
   },
-})
+});
 
 // Server function that will error
 const badServerFunc = createServerFn({
@@ -33,15 +35,15 @@ const badServerFunc = createServerFn({
     },
     async () => {
       try {
-        await fs.readFile('./doesnt-exist', 'utf-8')
-        return true
+        await fs.readFile('./doesnt-exist', 'utf-8');
+        return true;
       } catch (error) {
-        Sentry.captureException(error)
-        throw error
+        Sentry.captureException(error);
+        throw error;
       }
     },
-  )
-})
+  );
+});
 
 // Server function that will succeed but be traced
 const goodServerFunc = createServerFn({
@@ -53,50 +55,44 @@ const goodServerFunc = createServerFn({
       op: 'demo.success',
     },
     async () => {
-      await new Promise((resolve) => setTimeout(resolve, 500))
-      return { success: true }
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      return { success: true };
     },
-  )
-})
+  );
+});
 
 function RouteComponent() {
-  const [isLoading, setIsLoading] = useState<Record<string, boolean>>({})
-  const [hasError, setHasError] = useState<Record<string, boolean>>({})
-  const [showTrace, setShowTrace] = useState<Record<string, boolean>>({})
-  const [spanOps, setSpanOps] = useState<Record<string, string>>({})
-  const [demoStep, setDemoStep] = useState(0)
-  const [replayEvents, setReplayEvents] = useState<string[]>([])
-  const [copiedSpan, setCopiedSpan] = useState<string | null>(null)
-  const startTimeRef = useRef<string>('')
+  const [isLoading, setIsLoading] = useState<Record<string, boolean>>({});
+  const [hasError, setHasError] = useState<Record<string, boolean>>({});
+  const [showTrace, setShowTrace] = useState<Record<string, boolean>>({});
+  const [spanOps, setSpanOps] = useState<Record<string, string>>({});
+  const [demoStep, setDemoStep] = useState(0);
+  const [, setReplayEvents] = useState<string[]>([]);
+  const [copiedSpan, setCopiedSpan] = useState<string | null>(null);
+  const startTimeRef = useRef<string>('');
 
   useEffect(() => {
     // Set initial timestamp only once on client
     if (!startTimeRef.current) {
-      startTimeRef.current = new Date().toISOString()
+      startTimeRef.current = new Date().toISOString();
     }
 
     if (demoStep > 0) {
-      const secondsElapsed = (
-        (new Date().getTime() - new Date(startTimeRef.current).getTime()) /
-        1000
-      ).toFixed(1)
-      setReplayEvents((prev) => [
-        ...prev,
-        `Step ${demoStep}: +${secondsElapsed}s`,
-      ])
+      const secondsElapsed = ((new Date().getTime() - new Date(startTimeRef.current).getTime()) / 1000).toFixed(1);
+      setReplayEvents((prev) => [...prev, `Step ${demoStep}: +${secondsElapsed}s`]);
     }
-  }, [demoStep])
+  }, [demoStep]);
 
   const handleCopy = (operation: string) => {
-    navigator.clipboard.writeText(operation)
-    setCopiedSpan(operation)
-    setTimeout(() => setCopiedSpan(null), 2000)
-  }
+    navigator.clipboard.writeText(operation);
+    setCopiedSpan(operation);
+    setTimeout(() => setCopiedSpan(null), 2000);
+  };
 
   const handleClientError = async () => {
-    setIsLoading((prev) => ({ ...prev, clientError: true }))
-    setHasError((prev) => ({ ...prev, clientError: false }))
-    setShowTrace((prev) => ({ ...prev, clientError: true }))
+    setIsLoading((prev) => ({ ...prev, clientError: true }));
+    setHasError((prev) => ({ ...prev, clientError: false }));
+    setShowTrace((prev) => ({ ...prev, clientError: true }));
 
     try {
       await Sentry.startSpan(
@@ -108,25 +104,25 @@ function RouteComponent() {
           Sentry.setContext('demo', {
             feature: 'client-error-demo',
             triggered_at: new Date().toISOString(),
-          })
+          });
 
           // Simulate a client-side error
-          throw new Error('Client-side error demonstration')
+          throw new Error('Client-side error demonstration');
         },
-      )
+      );
     } catch (error) {
-      setHasError((prev) => ({ ...prev, clientError: true }))
-      setSpanOps((prev) => ({ ...prev, clientError: 'demo.client-error-flow' }))
-      Sentry.captureException(error)
+      setHasError((prev) => ({ ...prev, clientError: true }));
+      setSpanOps((prev) => ({ ...prev, clientError: 'demo.client-error-flow' }));
+      Sentry.captureException(error);
     } finally {
-      setIsLoading((prev) => ({ ...prev, clientError: false }))
+      setIsLoading((prev) => ({ ...prev, clientError: false }));
     }
-  }
+  };
 
   const handleServerError = async () => {
-    setIsLoading((prev) => ({ ...prev, serverError: true }))
-    setHasError((prev) => ({ ...prev, serverError: false }))
-    setShowTrace((prev) => ({ ...prev, serverError: true }))
+    setIsLoading((prev) => ({ ...prev, serverError: true }));
+    setHasError((prev) => ({ ...prev, serverError: false }));
+    setShowTrace((prev) => ({ ...prev, serverError: true }));
 
     try {
       await Sentry.startSpan(
@@ -138,23 +134,23 @@ function RouteComponent() {
           Sentry.setContext('demo', {
             feature: 'server-error-demo',
             triggered_at: new Date().toISOString(),
-          })
+          });
 
-          await badServerFunc()
+          await badServerFunc();
         },
-      )
+      );
     } catch (error) {
-      setHasError((prev) => ({ ...prev, serverError: true }))
-      setSpanOps((prev) => ({ ...prev, serverError: 'demo.server-error-flow' }))
-      Sentry.captureException(error)
+      setHasError((prev) => ({ ...prev, serverError: true }));
+      setSpanOps((prev) => ({ ...prev, serverError: 'demo.server-error-flow' }));
+      Sentry.captureException(error);
     } finally {
-      setIsLoading((prev) => ({ ...prev, serverError: false }))
+      setIsLoading((prev) => ({ ...prev, serverError: false }));
     }
-  }
+  };
 
   const handleClientTrace = async () => {
-    setIsLoading((prev) => ({ ...prev, client: true }))
-    setShowTrace((prev) => ({ ...prev, client: true }))
+    setIsLoading((prev) => ({ ...prev, client: true }));
+    setShowTrace((prev) => ({ ...prev, client: true }));
 
     await Sentry.startSpan(
       {
@@ -163,17 +159,17 @@ function RouteComponent() {
       },
       async () => {
         // Simulate some client-side work
-        await new Promise((resolve) => setTimeout(resolve, 1000))
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       },
-    )
+    );
 
-    setSpanOps((prev) => ({ ...prev, client: 'demo.client' }))
-    setIsLoading((prev) => ({ ...prev, client: false }))
-  }
+    setSpanOps((prev) => ({ ...prev, client: 'demo.client' }));
+    setIsLoading((prev) => ({ ...prev, client: false }));
+  };
 
   const handleServerTrace = async () => {
-    setIsLoading((prev) => ({ ...prev, server: true }))
-    setShowTrace((prev) => ({ ...prev, server: true }))
+    setIsLoading((prev) => ({ ...prev, server: true }));
+    setShowTrace((prev) => ({ ...prev, server: true }));
 
     try {
       await Sentry.startSpan(
@@ -182,14 +178,14 @@ function RouteComponent() {
           op: 'demo.server',
         },
         async () => {
-          await goodServerFunc()
+          await goodServerFunc();
         },
-      )
-      setSpanOps((prev) => ({ ...prev, server: 'demo.server' }))
+      );
+      setSpanOps((prev) => ({ ...prev, server: 'demo.server' }));
     } finally {
-      setIsLoading((prev) => ({ ...prev, server: false }))
+      setIsLoading((prev) => ({ ...prev, server: false }));
     }
-  }
+  };
 
   return (
     <>
@@ -209,8 +205,7 @@ function RouteComponent() {
       <div
         className="min-h-[calc(100vh-32px)] text-white p-8"
         style={{
-          backgroundImage:
-            'radial-gradient(41.11% 49.93% at 50% 49.93%, #8d5494 0%, #563275 52.26%, #1f1633 100%)',
+          backgroundImage: 'radial-gradient(41.11% 49.93% at 50% 49.93%, #8d5494 0%, #563275 52.26%, #1f1633 100%)',
         }}
       >
         <div className="max-w-7xl mx-auto">
@@ -218,8 +213,7 @@ function RouteComponent() {
           <div className="text-center mb-12">
             <h1 className="text-8xl font-bold mb-4 text-white">Sentry</h1>
             <p className="text-4xl font-semibold text-white">
-              Code <span className="inline-block -rotate-9">breaks</span>, fix
-              it faster
+              Code <span className="inline-block -rotate-9">breaks</span>, fix it faster
             </p>
           </div>
 
@@ -229,35 +223,25 @@ function RouteComponent() {
             <div className="bg-[#1C2333] rounded-lg border border-gray-800 p-6">
               <div className="space-y-4 text-gray-300">
                 <p>
-                  The Sentry integration monitors this application across all
-                  routes; not just this one (we care about all tabs) using our{' '}
-                  <code>@sentry/react</code> and <code>@sentry/node</code>{' '}
-                  packages.
+                  The Sentry integration monitors this application across all routes; not just this one (we care about
+                  all tabs) using our <code>@sentry/react</code> and <code>@sentry/node</code> packages.
                 </p>
                 <div className="grid grid-cols-4 gap-4">
                   <div className="bg-[#2D3555] rounded-lg p-4 border border-gray-700 hover:border-purple-500/50 transition-colors">
                     <div className="font-bold mb-1">Error Monitoring</div>
-                    <div className="text-sm text-gray-400">
-                      across client side and server functions
-                    </div>
+                    <div className="text-sm text-gray-400">across client side and server functions</div>
                   </div>
                   <div className="bg-[#2D3555] rounded-lg p-4 border border-gray-700 hover:border-purple-500/50 transition-colors">
                     <div className="font-bold mb-1">Tracing and Spans</div>
-                    <div className="text-sm text-gray-400">
-                      for client and server side performance
-                    </div>
+                    <div className="text-sm text-gray-400">for client and server side performance</div>
                   </div>
                   <div className="bg-[#2D3555] rounded-lg p-4 border border-gray-700 hover:border-purple-500/50 transition-colors">
                     <div className="font-bold mb-1">Session replay</div>
-                    <div className="text-sm text-gray-400">
-                      real user session playback
-                    </div>
+                    <div className="text-sm text-gray-400">real user session playback</div>
                   </div>
                   <div className="bg-[#2D3555] rounded-lg p-4 border border-gray-700 hover:border-purple-500/50 transition-colors">
                     <div className="font-bold mb-1">Real-time alerts</div>
-                    <div className="text-sm text-gray-400">
-                      because sleep is overrated anyway
-                    </div>
+                    <div className="text-sm text-gray-400">because sleep is overrated anyway</div>
                   </div>
                 </div>
               </div>
@@ -267,21 +251,18 @@ function RouteComponent() {
             <div className="grid grid-cols-2 gap-8">
               {/* Client Side Testing */}
               <div className="bg-[#1C2333] rounded-lg p-6 border border-gray-800">
-                <h2 className="text-xl font-semibold text-white mb-6">
-                  Client-Side Testing
-                </h2>
+                <h2 className="text-xl font-semibold text-white mb-6">Client-Side Testing</h2>
                 <div className="space-y-6">
                   <div>
                     <button
                       type="button"
                       onClick={() => {
-                        setDemoStep((prev) => prev + 1)
-                        handleClientError()
+                        setDemoStep((prev) => prev + 1);
+                        handleClientError();
                       }}
                       className="w-full text-white rounded-md p-4 relative overflow-hidden group"
                       style={{
-                        background:
-                          'linear-gradient(120deg, #c83852, #b44092 25%, #6a5fc1 50%, #452650 55%, #452650)',
+                        background: 'linear-gradient(120deg, #c83852, #b44092 25%, #6a5fc1 50%, #452650 55%, #452650)',
                         backgroundPosition: '2% 0',
                         backgroundSize: '250% 100%',
                       }}
@@ -289,9 +270,7 @@ function RouteComponent() {
                       <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 to-orange-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                       <div className="relative">
                         <div className="flex items-center mb-2">
-                          <span className="font-medium">
-                            Trigger Client-Side Error
-                          </span>
+                          <span className="font-medium">Trigger Client-Side Error</span>
                         </div>
                       </div>
                     </button>
@@ -323,12 +302,8 @@ function RouteComponent() {
                                 onClick={() => handleCopy(spanOps.clientError)}
                                 title="Click to copy operation name"
                               >
-                                <span className="text-purple-300 text-sm font-medium mr-2">
-                                  span.op
-                                </span>
-                                <code className="text-purple-400 text-sm font-mono">
-                                  {spanOps.clientError}
-                                </code>
+                                <span className="text-purple-300 text-sm font-medium mr-2">span.op</span>
+                                <code className="text-purple-400 text-sm font-mono">{spanOps.clientError}</code>
                               </button>
                               {copiedSpan === spanOps.clientError && (
                                 <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-green-500/90 text-white text-xs px-2 py-1 rounded animate-fade-out">
@@ -346,13 +321,12 @@ function RouteComponent() {
                     <button
                       type="button"
                       onClick={() => {
-                        setDemoStep((prev) => prev + 1)
-                        handleClientTrace()
+                        setDemoStep((prev) => prev + 1);
+                        handleClientTrace();
                       }}
                       className="w-full text-white rounded-md p-4 relative overflow-hidden group"
                       style={{
-                        background:
-                          'linear-gradient(120deg, #c83852, #b44092 25%, #6a5fc1 50%, #452650 55%, #452650)',
+                        background: 'linear-gradient(120deg, #c83852, #b44092 25%, #6a5fc1 50%, #452650 55%, #452650)',
                         backgroundPosition: '2% 0',
                         backgroundSize: '250% 100%',
                       }}
@@ -360,9 +334,7 @@ function RouteComponent() {
                       <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                       <div className="relative">
                         <div className="flex items-center mb-2">
-                          <span className="font-medium">
-                            Test Client-Side Span
-                          </span>
+                          <span className="font-medium">Test Client-Side Span</span>
                         </div>
                       </div>
                     </button>
@@ -393,12 +365,8 @@ function RouteComponent() {
                                   onClick={() => handleCopy(spanOps.client)}
                                   title="Click to copy operation name"
                                 >
-                                  <span className="text-purple-300 text-sm font-medium mr-2">
-                                    span.op
-                                  </span>
-                                  <code className="text-purple-400 text-sm font-mono">
-                                    {spanOps.client}
-                                  </code>
+                                  <span className="text-purple-300 text-sm font-medium mr-2">span.op</span>
+                                  <code className="text-purple-400 text-sm font-mono">{spanOps.client}</code>
                                 </button>
                                 {copiedSpan === spanOps.client && (
                                   <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-green-500/90 text-white text-xs px-2 py-1 rounded animate-fade-out">
@@ -417,21 +385,18 @@ function RouteComponent() {
 
               {/* Server Side Testing */}
               <div className="bg-[#1C2333] rounded-lg p-6 border border-gray-800">
-                <h2 className="text-xl font-semibold text-white mb-6">
-                  Server-Side Testing
-                </h2>
+                <h2 className="text-xl font-semibold text-white mb-6">Server-Side Testing</h2>
                 <div className="space-y-6">
                   <div>
                     <button
                       type="button"
                       onClick={() => {
-                        setDemoStep((prev) => prev + 1)
-                        handleServerError()
+                        setDemoStep((prev) => prev + 1);
+                        handleServerError();
                       }}
                       className="w-full text-white rounded-md p-4 relative overflow-hidden group"
                       style={{
-                        background:
-                          'linear-gradient(120deg, #c83852, #b44092 25%, #6a5fc1 50%, #452650 55%, #452650)',
+                        background: 'linear-gradient(120deg, #c83852, #b44092 25%, #6a5fc1 50%, #452650 55%, #452650)',
                         backgroundPosition: '2% 0',
                         backgroundSize: '250% 100%',
                       }}
@@ -439,9 +404,7 @@ function RouteComponent() {
                       <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 to-orange-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                       <div className="relative">
                         <div className="flex items-center mb-2">
-                          <span className="font-medium">
-                            Trigger Server Error
-                          </span>
+                          <span className="font-medium">Trigger Server Error</span>
                         </div>
                       </div>
                     </button>
@@ -473,12 +436,8 @@ function RouteComponent() {
                                 onClick={() => handleCopy(spanOps.serverError)}
                                 title="Click to copy operation name"
                               >
-                                <span className="text-purple-300 text-sm font-medium mr-2">
-                                  span.op
-                                </span>
-                                <code className="text-purple-400 text-sm font-mono">
-                                  {spanOps.serverError}
-                                </code>
+                                <span className="text-purple-300 text-sm font-medium mr-2">span.op</span>
+                                <code className="text-purple-400 text-sm font-mono">{spanOps.serverError}</code>
                               </button>
                               {copiedSpan === spanOps.serverError && (
                                 <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-green-500/90 text-white text-xs px-2 py-1 rounded animate-fade-out">
@@ -496,13 +455,12 @@ function RouteComponent() {
                     <button
                       type="button"
                       onClick={() => {
-                        setDemoStep((prev) => prev + 1)
-                        handleServerTrace()
+                        setDemoStep((prev) => prev + 1);
+                        handleServerTrace();
                       }}
                       className="w-full text-white rounded-md p-4 relative overflow-hidden group"
                       style={{
-                        background:
-                          'linear-gradient(120deg, #c83852, #b44092 25%, #6a5fc1 50%, #452650 55%, #452650)',
+                        background: 'linear-gradient(120deg, #c83852, #b44092 25%, #6a5fc1 50%, #452650 55%, #452650)',
                         backgroundPosition: '2% 0',
                         backgroundSize: '250% 100%',
                       }}
@@ -541,12 +499,8 @@ function RouteComponent() {
                                   onClick={() => handleCopy(spanOps.server)}
                                   title="Click to copy operation name"
                                 >
-                                  <span className="text-purple-300 text-sm font-medium mr-2">
-                                    span.op
-                                  </span>
-                                  <code className="text-purple-400 text-sm font-mono">
-                                    {spanOps.server}
-                                  </code>
+                                  <span className="text-purple-300 text-sm font-medium mr-2">span.op</span>
+                                  <code className="text-purple-400 text-sm font-mono">{spanOps.server}</code>
                                 </button>
                                 {copiedSpan === spanOps.server && (
                                   <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-green-500/90 text-white text-xs px-2 py-1 rounded animate-fade-out">
@@ -567,5 +521,5 @@ function RouteComponent() {
         </div>
       </div>
     </>
-  )
+  );
 }
