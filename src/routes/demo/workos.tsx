@@ -1,8 +1,8 @@
 'use client';
 
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { getAuth } from '@workos/authkit-tanstack-react-start';
-import { useAuth } from '@workos-inc/authkit-react';
+import { createFileRoute } from '@tanstack/react-router';
+import { getAuth, getSignInUrl } from '@workos/authkit-tanstack-react-start';
+import { useAuth } from '@workos/authkit-tanstack-react-start/client';
 
 export const Route = createFileRoute('/demo/workos')({
   component: App,
@@ -15,15 +15,14 @@ export const Route = createFileRoute('/demo/workos')({
 });
 
 function App() {
-  const { isLoading, signIn } = useAuth();
+  const { loading, signOut } = useAuth();
   const { user } = Route.useLoaderData();
-  const navigate = useNavigate();
 
-  const signOut = () => {
-    navigate({ to: '/auth/logout', replace: true });
+  const signIn = async () => {
+    window.location.href = await getSignInUrl();
   };
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center p-4">
         <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-2xl p-8 w-full max-w-md border border-gray-700/50">
@@ -75,7 +74,7 @@ function App() {
 
             {/* Sign Out Button */}
             <button
-              onClick={signOut}
+              onClick={() => signOut()}
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors shadow-lg hover:shadow-xl"
             >
               Sign Out
@@ -93,7 +92,7 @@ function App() {
         <p className="text-gray-400 text-center mb-6">Sign in to view your profile information</p>
         <button
           onClick={signIn}
-          disabled={isLoading}
+          disabled={loading}
           className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Sign In with AuthKit

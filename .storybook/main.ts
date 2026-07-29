@@ -9,7 +9,16 @@ const config: StorybookConfig = {
   },
   async viteFinal(config) {
     const { default: tailwindcss } = await import('@tailwindcss/vite');
-    config.plugins = config.plugins || [];
+
+    // Storybook auto-merges the root vite.config.ts, which pulls in the TanStack
+    // Start (SSR/server-fn), TanStack Router codegen, and Nitro plugins. Those
+    // assume a single-entry app build/route tree and break Storybook's
+    // multi-entry preview build, so drop them here.
+    const blockedPrefixes = ['tanstack-start', 'tanstack-router', 'tanstack:router', 'nitro'];
+    config.plugins = (config.plugins || []).flat(Infinity).filter((plugin) => {
+      const name = plugin && typeof plugin === 'object' && 'name' in plugin ? plugin.name : undefined;
+      return !name || !blockedPrefixes.some((prefix) => name.startsWith(prefix));
+    });
     config.plugins.push(tailwindcss());
     return config;
   },

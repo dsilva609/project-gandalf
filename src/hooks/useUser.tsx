@@ -1,24 +1,23 @@
 import { useEffect } from 'react';
 
 import { useLocation } from '@tanstack/react-router';
-import { useAuth } from '@workos-inc/authkit-react';
+import { getSignInUrl } from '@workos/authkit-tanstack-react-start';
+import { useAuth } from '@workos/authkit-tanstack-react-start/client';
 
 type UserOrNull = ReturnType<typeof useAuth>['user'];
 
 // redirects to the sign-in page if the user is not signed in
 export const useUser = (): UserOrNull => {
-  const { user, isLoading, signIn } = useAuth();
+  const { user, loading } = useAuth();
   const location = useLocation();
 
   useEffect(() => {
-    if (!isLoading && !user) {
-      signIn({
-        state: { returnTo: location.pathname },
+    if (!loading && !user) {
+      getSignInUrl({ data: location.pathname }).then((url) => {
+        window.location.href = url;
       });
-    } else {
-      console.log(user);
     }
-  }, [isLoading, user]);
+  }, [loading, user, location.pathname]);
 
   return user;
 };

@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 
-import { Link, useNavigate } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
+import { useAuth } from '@workos/authkit-tanstack-react-start/client';
 import {
   BookOpen,
   ChevronDown,
@@ -25,8 +26,7 @@ export default function Header({ user }: { user?: User }) {
   const [isOpen, setIsOpen] = useState(false);
   const [groupedExpanded, setGroupedExpanded] = useState<Record<string, boolean>>({});
 
-  const navigate = useNavigate();
-  const signOut = () => navigate({ to: '/auth/logout', replace: true });
+  const { signOut } = useAuth();
 
   return (
     <>
@@ -246,7 +246,7 @@ export default function Header({ user }: { user?: User }) {
         <div className="p-4 border-t border-gray-700 bg-gray-800 flex flex-col gap-2">
           {user ? (
             <button
-              onClick={signOut}
+              onClick={() => signOut()}
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors shadow-lg hover:shadow-xl"
             >
               Sign Out
