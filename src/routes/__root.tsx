@@ -1,7 +1,7 @@
 import { TanStackDevtools } from '@tanstack/react-devtools';
 import { HeadContent, Scripts, createRootRouteWithContext } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
-import { getAuth } from '@workos/authkit-tanstack-react-start';
+import { getAuthAction } from '@workos/authkit-tanstack-react-start';
 
 import Header from '~/components/Header';
 import ConvexProvider from '~/integrations/convex/provider';
@@ -40,24 +40,26 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
   shellComponent: RootDocument,
   loader: async () => {
-    const { user } = await getAuth();
+    // Sanitized auth state (no access token) - safe to serialize into the document
+    // and used to seed AuthKitProvider so it doesn't re-fetch auth on the client.
+    const auth = await getAuthAction();
     return {
-      user,
+      auth,
     };
   },
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-  const { user } = Route.useLoaderData();
+  const { auth } = Route.useLoaderData();
   return (
     <html lang="en">
       <head>
         <HeadContent />
       </head>
       <body>
-        <WorkOSProvider>
+        <WorkOSProvider initialAuth={auth}>
           <ConvexProvider>
-            <Header user={user} />
+            <Header />
             {children}
             <TanStackDevtools
               config={{

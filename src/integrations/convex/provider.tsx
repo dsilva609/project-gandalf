@@ -28,9 +28,12 @@ function useAuthFromAuthKit() {
   const { getAccessToken, refresh } = useAccessToken();
 
   const isAuthenticated = !!user;
+  // Depend on the boolean rather than the `user` object: Convex re-runs its auth
+  // effects (tearing down and re-establishing the connection) whenever this
+  // callback's identity changes, and `user` gets a fresh identity on every refresh.
   const fetchAccessToken = useCallback(
     async ({ forceRefreshToken }: { forceRefreshToken?: boolean } = {}): Promise<string | null> => {
-      if (!user) {
+      if (!isAuthenticated) {
         return null;
       }
 
@@ -45,7 +48,7 @@ function useAuthFromAuthKit() {
         return null;
       }
     },
-    [user, refresh, getAccessToken],
+    [isAuthenticated, refresh, getAccessToken],
   );
 
   return {
